@@ -7,9 +7,13 @@
 
 import SwiftUI
 
+
 public struct SigninView: View {
     @State private var email = ""
     @State private var password = ""
+    @StateObject private var viewModel = SigninViewModel()
+    
+    public init() { }
     
     public var body: some View {
         ZStack {
@@ -53,6 +57,13 @@ public struct SigninView: View {
                 
                 Button {
                     //Login
+                    viewModel.signIn { success in
+                        if success {
+                            // Navigate to another view or perform other actions upon successful sign-in
+                        } else {
+                            // Handle the sign-in error if needed
+                        }
+                    }
                 } label: {
                     Text("SignIn")
                         .bold()
@@ -101,3 +112,5 @@ extension View {
             }
         }
 }
+
+
