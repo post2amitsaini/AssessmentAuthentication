@@ -24,7 +24,8 @@ let package = Package(
             name: "AssessmentAuthentication",
             dependencies: [
                 .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
-            ]),
+            ],
+            resources: [.copy("GoogleService-Info.plist")]),
         .testTarget(
             name: "AssessmentAuthenticationTests",
             dependencies: ["AssessmentAuthentication"]),

@@ -9,15 +9,25 @@ import SwiftUI
 
 
 public struct SigninView: View {
-    @State private var email = ""
-    @State private var password = ""
+//    @State private var email = ""
+//    @State private var password = ""
     @StateObject private var viewModel = SigninViewModel()
+    @State private var signInSuccess = false
+    @State private var isSignUpActive = false
     
     public init() { }
     
     public var body: some View {
         ZStack {
             Color.black
+            NavigationLink(
+                destination: MovieListView(),
+                isActive: $signInSuccess, // Navigate when isLoggedIn becomes true
+                label: { EmptyView() }
+                            )
+            NavigationLink(destination: SignUpView(),
+                           isActive: $isSignUpActive,
+                           label: { EmptyView()})
             RoundedRectangle(cornerRadius: 30, style: .continuous)
                 .foregroundStyle(.linearGradient(colors: [.pink, .red], startPoint: .topLeading, endPoint: .bottomTrailing))
                 .frame(width: 1000, height: 400)
@@ -30,10 +40,10 @@ public struct SigninView: View {
                     .font(.system(size: 40, weight: .bold, design: .rounded))
                     .offset(x: -100, y: -100)
                 
-                TextField("Email" , text: $email)
+                TextField("Email" , text: $viewModel.email)
                     .foregroundColor(.white)
                     .textFieldStyle(.plain)
-                    .placeholder(when: email.isEmpty)  {
+                    .placeholder(when: viewModel.email.isEmpty)  {
                         Text("Email")
                             .foregroundColor(.white)
                             .bold()
@@ -42,10 +52,10 @@ public struct SigninView: View {
                     .frame(width: 350, height: 1)
                     .foregroundColor(.white)
                 
-                SecureField("Password", text: $password)
+                SecureField("Password", text: $viewModel.password)
                     .foregroundColor(.white)
                     .textFieldStyle(.plain)
-                    .placeholder(when: password.isEmpty) {
+                    .placeholder(when: viewModel.password.isEmpty) {
                         Text("Password")
                             .foregroundColor(.white)
                             .bold()
@@ -57,11 +67,15 @@ public struct SigninView: View {
                 
                 Button {
                     //Login
-                    viewModel.signIn { success in
-                        if success {
-                            // Navigate to another view or perform other actions upon successful sign-in
-                        } else {
-                            // Handle the sign-in error if needed
+                    Task {
+                        do {
+                            try await viewModel.signIn()
+                            // Sign-in was successful
+                            signInSuccess = true
+                        } catch {
+                            // Handle the sign-in error here
+                            signInSuccess = false
+                            print("Sign-in error: \(error.localizedDescription)")
                         }
                     }
                 } label: {
@@ -79,6 +93,7 @@ public struct SigninView: View {
                 
                 Button {
                     //Sign UP
+                    isSignUpActive = true
                 } label: {
                     Text("Do not have an account? SignUp")
                         .bold()
