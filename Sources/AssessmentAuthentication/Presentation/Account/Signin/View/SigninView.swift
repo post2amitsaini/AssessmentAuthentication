@@ -20,11 +20,11 @@ public struct SigninView: View {
     public var body: some View {
         ZStack {
             Color.black
-            NavigationLink(
-                destination: MovieListView(),
-                isActive: $signInSuccess, // Navigate when isLoggedIn becomes true
-                label: { EmptyView() }
-                            )
+//            NavigationLink(
+//                destination: MovieListView(),
+//                isActive: $signInSuccess, // Navigate when isLoggedIn becomes true
+//                label: { EmptyView() }
+//                            )
             NavigationLink(destination: SignUpView(),
                            isActive: $isSignUpActive,
                            label: { EmptyView()})
