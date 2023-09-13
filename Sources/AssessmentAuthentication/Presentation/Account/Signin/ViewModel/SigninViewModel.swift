@@ -5,35 +5,29 @@
 //  Created by Amit Saini on 24/08/23.
 //
 
-import Foundation
-import Firebase
-import FirebaseAuth
+import SwiftUI
 
-public class SigninViewModel: ObservableObject {
+class SigninViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var signInError: String? = nil
-    
-    func signIn() async throws {
+
+    private let authenticationUseCase: AuthenticationUseCaseProtocol
+
+    init(authenticationUseCase: AuthenticationUseCaseProtocol) {
+        self.authenticationUseCase = authenticationUseCase
+    }
+
+    func signIn() async {
         do {
-            let authResult = try await Auth.auth().signIn(withEmail: email, password: password)
-            // User successfully signed in
-            // You can add additional logic here, such as navigating to another view
-            print("User signed in successfully")
-        
+            try await authenticationUseCase.signIn(email: email, password: password)
+            // Sign-in was successful
         } catch {
-            // Handle sign-in error
-            self.signInError = error.localizedDescription
-            throw error
+            // Handle the sign-in error here
+            signInError = error.localizedDescription
         }
     }
 }
 
-public class UserSettings: ObservableObject {
-    @Published public var isLoggedIn = false
-    public init() {
-           // Initialize your properties here if needed
-       }
-}
 
 

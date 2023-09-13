@@ -9,25 +9,15 @@ import SwiftUI
 
 
 public struct SigninView: View {
-//    @State private var email = ""
-//    @State private var password = ""
-    @StateObject private var viewModel = SigninViewModel()
-    @State private var signInSuccess = false
-    @State private var isSignUpActive = false
+    @StateObject private var viewModel: SigninViewModel
     
-    public init() { }
-    
+    init(viewModel: SigninViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
+
     public var body: some View {
         ZStack {
             Color.black
-//            NavigationLink(
-//                destination: MovieListView(),
-//                isActive: $signInSuccess, // Navigate when isLoggedIn becomes true
-//                label: { EmptyView() }
-//                            )
-            NavigationLink(destination: SignUpView(),
-                           isActive: $isSignUpActive,
-                           label: { EmptyView()})
             RoundedRectangle(cornerRadius: 30, style: .continuous)
                 .foregroundStyle(.linearGradient(colors: [.pink, .red], startPoint: .topLeading, endPoint: .bottomTrailing))
                 .frame(width: 1000, height: 400)
@@ -66,17 +56,11 @@ public struct SigninView: View {
                     .foregroundColor(.white)
                 
                 Button {
-                    //Login
+                    // Login
                     Task {
-                        do {
-                            try await viewModel.signIn()
-                            // Sign-in was successful
-                            signInSuccess = true
-                        } catch {
-                            // Handle the sign-in error here
-                            signInSuccess = false
-                            print("Sign-in error: \(error.localizedDescription)")
-                        }
+                        await viewModel.signIn()
+                        // No need for try since signIn doesn't throw
+                        print("helooooooooo")
                     }
                 } label: {
                     Text("SignIn")
@@ -93,7 +77,6 @@ public struct SigninView: View {
                 
                 Button {
                     //Sign UP
-                    isSignUpActive = true
                 } label: {
                     Text("Do not have an account? SignUp")
                         .bold()
@@ -111,21 +94,9 @@ public struct SigninView: View {
 
 struct SigninView_Previews: PreviewProvider {
     static var previews: some View {
-        SigninView()
+        SigninView(viewModel: SigninViewModel(authenticationUseCase: AuthenticationUseCase(authenticationData: AuthenticationRepository())))
     }
 }
 
-extension View {
-    func placeholder<Content: View>(
-        when shouldShow: Bool,
-        alignment: Alignment = .leading,
-        @ViewBuilder placeholder: () -> Content) -> some View {
-            
-            ZStack(alignment: alignment) {
-                placeholder().opacity(shouldShow ? 1 : 0)
-                self
-            }
-        }
-}
 
 
