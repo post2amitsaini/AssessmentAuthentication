@@ -7,7 +7,16 @@
 
 import SwiftUI
 
-class SigninViewModel: ObservableObject {
+// SigninViewModelProtocol.swift
+public protocol SigninViewModelProtocol: ObservableObject {
+    var email: String { get set }
+    var password: String { get set }
+    var signInError: String? { get set }
+
+    func signIn() async
+}
+
+class SigninViewModel: ObservableObject, SigninViewModelProtocol {
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var signInError: String? = nil

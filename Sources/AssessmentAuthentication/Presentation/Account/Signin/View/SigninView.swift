@@ -9,12 +9,14 @@ import SwiftUI
 
 
 public struct SigninView: View {
-    @StateObject private var viewModel: SigninViewModel
     
-    init(viewModel: SigninViewModel) {
-        self._viewModel = StateObject(wrappedValue: viewModel)
+    @StateObject private var viewModel: SigninViewModelProtocol
+    
+    public init(viewModel: SigninViewModelProtocol) {
+        self.viewModel = viewModel
     }
-
+    
+    
     public var body: some View {
         ZStack {
             Color.black
