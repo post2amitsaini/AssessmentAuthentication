@@ -6,34 +6,34 @@
 //
 
 import SwiftUI
+import Combine
 
-// SigninViewModelProtocol.swift
-public protocol SigninViewModelProtocol: ObservableObject {
-    var email: String { get set }
-    var password: String { get set }
-    var signInError: String? { get set }
-
-    func signIn() async
-}
-
-class SigninViewModel: ObservableObject, SigninViewModelProtocol {
+class SigninViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
-    @Published var signInError: String? = nil
+    @Published var signInResult: Result<Bool, Error>?
+    @Published var isSignInButtonEnabled: Bool = false
 
-    private let authenticationUseCase: AuthenticationUseCaseProtocol
+    private var cancellables: Set<AnyCancellable> = []
+    private let signInUseCase: SignInUseCase
 
-    init(authenticationUseCase: AuthenticationUseCaseProtocol) {
-        self.authenticationUseCase = authenticationUseCase
+    init(signInUseCase: SignInUseCase = SignInUseCase(authRepository: AuthRepositoryImpl())) {
+        self.signInUseCase = signInUseCase
+        
+        Publishers.CombineLatest($email, $password)
+            .map { email, password in
+                return email.count > 0 && password.count > 0
+            }
+            .assign(to: &$isSignInButtonEnabled)
     }
 
     func signIn() async {
+        let credentials = AuthCredentials(email: email, password: password)
         do {
-            try await authenticationUseCase.signIn(email: email, password: password)
-            // Sign-in was successful
+            let result = try await signInUseCase.execute(credentials: credentials)
+            signInResult = .success(result)
         } catch {
-            // Handle the sign-in error here
-            signInError = error.localizedDescription
+            signInResult = .failure(error)
         }
     }
 }

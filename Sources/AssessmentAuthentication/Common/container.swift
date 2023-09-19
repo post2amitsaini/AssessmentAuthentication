@@ -16,15 +16,6 @@ public class DefaultAuthenticationDependencies: AuthenticationDependencies {
     public init() { }
     
     public func registerDependencies(container: Container) {
-        container.register(AuthenticationRepositoryProtocol.self) { _ in
-            return AuthenticationRepository()
-        }
-        container.register(AuthenticationUseCaseProtocol.self) { r in
-            return AuthenticationUseCase(authenticationData: r.resolve(AuthenticationRepositoryProtocol.self)!)
-        }
-        container.register(SigninViewModelProtocol.self) { r in
-            return SigninViewModel(authenticationUseCase: r.resolve(AuthenticationUseCaseProtocol.self)!)
-        }
     }
 }
 

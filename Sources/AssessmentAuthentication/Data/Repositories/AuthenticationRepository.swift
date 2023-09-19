@@ -8,11 +8,14 @@
 import Foundation
 import FirebaseAuth
 
-class AuthenticationRepository: AuthenticationRepositoryProtocol {
-    func signIn(email: String, password: String) async throws {
+class AuthRepositoryImpl: AuthRepositoryProtocol {
+    
+
+    func signIn(credentials: AuthCredentials) async throws -> Bool {
         do {
-            let authResult = try await Auth.auth().signIn(withEmail: email, password: password)
+            let authResult = try await Auth.auth().signIn(withEmail: credentials.email, password: credentials.password)
             // User successfully signed in
+            return true
         } catch {
             // Handle sign-in error
             throw error

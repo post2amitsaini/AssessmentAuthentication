@@ -10,12 +10,9 @@ import SwiftUI
 
 public struct SigninView: View {
     
-    @StateObject private var viewModel: SigninViewModelProtocol
+    @StateObject var viewModel = SigninViewModel()
     
-    public init(viewModel: SigninViewModelProtocol) {
-        self.viewModel = viewModel
-    }
-    
+    public init() { }
     
     public var body: some View {
         ZStack {
@@ -35,6 +32,7 @@ public struct SigninView: View {
                 TextField("Email" , text: $viewModel.email)
                     .foregroundColor(.white)
                     .textFieldStyle(.plain)
+                    .keyboardType(.emailAddress)
                     .placeholder(when: viewModel.email.isEmpty)  {
                         Text("Email")
                             .foregroundColor(.white)
@@ -73,6 +71,7 @@ public struct SigninView: View {
                                 .fill(.linearGradient(colors: [.pink, .red], startPoint: .top, endPoint: .bottomTrailing))
                         )
                         .foregroundColor(.white)
+                        .disabled(!viewModel.isSignInButtonEnabled)
                 }
                 .padding(.top)
                 .offset(y: 110)
@@ -96,7 +95,7 @@ public struct SigninView: View {
 
 struct SigninView_Previews: PreviewProvider {
     static var previews: some View {
-        SigninView(viewModel: SigninViewModel(authenticationUseCase: AuthenticationUseCase(authenticationData: AuthenticationRepository())))
+        SigninView()
     }
 }
 
