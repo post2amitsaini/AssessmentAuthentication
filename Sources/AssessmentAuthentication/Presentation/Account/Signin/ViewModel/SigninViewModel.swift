@@ -16,6 +16,7 @@ class SigninViewModel: ObservableObject {
 
     private var cancellables: Set<AnyCancellable> = []
     private let signInUseCase: SignInUseCase
+    //@EnvironmentObject private var coordinator: Coordinator
 
     init(signInUseCase: SignInUseCase = SignInUseCase(authRepository: AuthRepositoryImpl())) {
         self.signInUseCase = signInUseCase
@@ -31,9 +32,15 @@ class SigninViewModel: ObservableObject {
         let credentials = AuthCredentials(email: email, password: password)
         do {
             let result = try await signInUseCase.execute(credentials: credentials)
-            signInResult = .success(result)
+            DispatchQueue.main.async {
+                
+                self.signInResult = .success(result)
+            }
+            //coordinator.push(.Home)
         } catch {
-            signInResult = .failure(error)
+            DispatchQueue.main.async {
+                self.signInResult = .failure(error)
+            }
         }
     }
 }

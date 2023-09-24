@@ -7,9 +7,13 @@
 
 import SwiftUI
 
-struct SignUpView: View {
-    @State private var email = ""
-    @State private var password = ""
+public struct SignUpView: View {
+    @StateObject var viewModel = SignUpViewModel()
+    public var onSignUpResponse: (() -> Void)?
+    
+    public init(onSignUpResponse: (() -> Void)? = nil) {
+        self.onSignUpResponse = onSignUpResponse
+    }
     
     public var body: some View {
         ZStack {
@@ -26,10 +30,11 @@ struct SignUpView: View {
                     .font(.system(size: 40, weight: .bold, design: .rounded))
                     .offset(x: -100, y: -100)
                 
-                TextField("Email" , text: $email)
+                TextField("Email" , text: $viewModel.email)
                     .foregroundColor(.white)
                     .textFieldStyle(.plain)
-                    .placeholder(when: email.isEmpty)  {
+                    .keyboardType(.emailAddress)
+                    .placeholder(when: viewModel.email.isEmpty)  {
                         Text("Email")
                             .foregroundColor(.white)
                             .bold()
@@ -38,10 +43,10 @@ struct SignUpView: View {
                     .frame(width: 350, height: 1)
                     .foregroundColor(.white)
                 
-                SecureField("Password", text: $password)
+                SecureField("Password", text: $viewModel.password)
                     .foregroundColor(.white)
                     .textFieldStyle(.plain)
-                    .placeholder(when: password.isEmpty) {
+                    .placeholder(when: viewModel.password.isEmpty) {
                         Text("Password")
                             .foregroundColor(.white)
                             .bold()
@@ -52,7 +57,10 @@ struct SignUpView: View {
                     .foregroundColor(.white)
                 
                 Button {
-                    //Login
+                    //SignUp
+                    Task {
+                        await viewModel.signUp()
+                    }
                 } label: {
                     Text("SignUp")
                         .bold()

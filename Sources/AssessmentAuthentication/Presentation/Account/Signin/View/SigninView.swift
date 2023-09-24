@@ -11,8 +11,13 @@ import SwiftUI
 public struct SigninView: View {
     
     @StateObject var viewModel = SigninViewModel()
+    public var onSignUpTapped: (() -> Void)?
+    public var onSuccessfulLogin: (() -> Void)?
     
-    public init() { }
+    public init(onSignUpTapped: (() -> Void)? = nil, onSuccessfulLogin: (() -> Void)? = nil) {
+        self.onSignUpTapped = onSignUpTapped
+        self.onSuccessfulLogin = onSuccessfulLogin
+    }
     
     public var body: some View {
         ZStack {
@@ -59,8 +64,7 @@ public struct SigninView: View {
                     // Login
                     Task {
                         await viewModel.signIn()
-                        // No need for try since signIn doesn't throw
-                        print("helooooooooo")
+                        onSuccessfulLogin?()
                     }
                 } label: {
                     Text("SignIn")
@@ -78,6 +82,7 @@ public struct SigninView: View {
                 
                 Button {
                     //Sign UP
+                    onSignUpTapped?()
                 } label: {
                     Text("Do not have an account? SignUp")
                         .bold()

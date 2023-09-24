@@ -10,7 +10,6 @@ import FirebaseAuth
 
 class AuthRepositoryImpl: AuthRepositoryProtocol {
     
-
     func signIn(credentials: AuthCredentials) async throws -> Bool {
         do {
             let authResult = try await Auth.auth().signIn(withEmail: credentials.email, password: credentials.password)

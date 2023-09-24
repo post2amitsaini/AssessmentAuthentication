@@ -16,6 +16,9 @@ public class DefaultAuthenticationDependencies: AuthenticationDependencies {
     public init() { }
     
     public func registerDependencies(container: Container) {
+//        container.register(AuthenticationCoordinatorProtocol.self) { resolver in
+//            return AuthenticationCoordinator()
+//        }
     }
 }
 
