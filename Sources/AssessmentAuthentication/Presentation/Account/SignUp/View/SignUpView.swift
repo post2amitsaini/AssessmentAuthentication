@@ -9,10 +9,10 @@ import SwiftUI
 
 public struct SignUpView: View {
     @StateObject var viewModel = SignUpViewModel()
-    public var onSignUpResponse: (() -> Void)?
+    public var onSuccessfulSignUp: (() -> Void)?
     
-    public init(onSignUpResponse: (() -> Void)? = nil) {
-        self.onSignUpResponse = onSignUpResponse
+    public init(onSuccessfulSignUp: (() -> Void)? = nil) {
+        self.onSuccessfulSignUp = onSuccessfulSignUp
     }
     
     public var body: some View {
@@ -60,6 +60,7 @@ public struct SignUpView: View {
                     //SignUp
                     Task {
                         await viewModel.signUp()
+                        onSuccessfulSignUp?()
                     }
                 } label: {
                     Text("SignUp")
