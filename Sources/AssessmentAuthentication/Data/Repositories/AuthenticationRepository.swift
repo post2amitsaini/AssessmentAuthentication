@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseAuth
 
-class AuthRepositoryImpl: AuthRepositoryProtocol {
+class AuthRepository: AuthRepositoryProtocol {
     
     func signIn(credentials: AuthCredentials) async throws -> Bool {
         do {

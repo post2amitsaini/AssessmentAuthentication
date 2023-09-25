@@ -9,7 +9,7 @@ import Foundation
 import Combine
 @testable import AssessmentAuthentication
 
-class SignInUseCaseMock: SignInUseCaseProtocol {
+class MockSignInUseCase: SignInUseCaseProtocol {
     var result: Result<Bool, Error>?
     
     func execute(credentials: AuthCredentials) async throws -> Bool {
@@ -25,4 +25,8 @@ class SignInUseCaseMock: SignInUseCaseProtocol {
             fatalError("SignInUseCaseMock result is not set.")
         }
     }
+}
+
+enum MockSignInUseCaseError: Error {
+    case signInError
 }

@@ -15,9 +15,9 @@ class SignUpViewModel: ObservableObject {
     @Published var isSignUpButtonEnabled: Bool = false
 
     private var cancellables: Set<AnyCancellable> = []
-    private let signUpUseCase: SignUpUseCase
+    private let signUpUseCase: SignUpUseCaseProtocol
 
-    init(signUpUseCase: SignUpUseCase = SignUpUseCase(signUpRepository: SignUpRepositoryImpl())) {
+    init(signUpUseCase: SignUpUseCaseProtocol = SignUpUseCase(signUpRepository: SignUpRepository())) {
         self.signUpUseCase = signUpUseCase
         
         Publishers.CombineLatest($email, $password)

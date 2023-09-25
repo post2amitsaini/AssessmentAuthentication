@@ -15,10 +15,10 @@ class SigninViewModel: ObservableObject {
     @Published var isSignInButtonEnabled: Bool = false
 
     private var cancellables: Set<AnyCancellable> = []
-    private let signInUseCase: SignInUseCase
+    private let signInUseCase: SignInUseCaseProtocol
     //@EnvironmentObject private var coordinator: Coordinator
 
-    init(signInUseCase: SignInUseCase = SignInUseCase(authRepository: AuthRepositoryImpl())) {
+    init(signInUseCase: SignInUseCaseProtocol = SignInUseCase(authRepository: AuthRepository())) {
         self.signInUseCase = signInUseCase
         
         Publishers.CombineLatest($email, $password)
