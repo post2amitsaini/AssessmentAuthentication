@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "9.0.0"),
-        .package(url: "https://github.com/Swinject/Swinject.git", from: "2.8.0")
+        //.package(url: "https://github.com/Swinject/Swinject.git", from: "2.8.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -25,7 +25,7 @@ let package = Package(
             name: "AssessmentAuthentication",
             dependencies: [
                 .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
-                .product(name: "Swinject", package: "Swinject")
+                //.product(name: "Swinject", package: "Swinject")
             ],
             resources: [.copy("GoogleService-Info.plist")]),
         .testTarget(
